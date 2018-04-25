@@ -5,14 +5,10 @@ var morgan = require('morgan');
 var v1 = require('./v1/index');//v1版本接口
 var config = require('./config');
 
-var jwt = require('jsonwebtoken');//用来创建和确认用户信息摘要
-
 // =======================
 // 配置 =========
 // =======================
 var port = process.env.PORT || config.port; // 设置启动端口
-
-
 
 //用body parser 来解析post和url信息中的参数
 app.use(bodyParser.urlencoded({extended: false}));
@@ -30,9 +26,6 @@ app.get('/', function(req, res) {
 });
 //v1 版本 所有路由
 app.use('/api/v1', v1);
-
-// API 路由 -------------------
-// 待会儿再添加
 
 // =======================
 // 启动服务 ======
