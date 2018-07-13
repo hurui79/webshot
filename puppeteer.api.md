@@ -269,18 +269,17 @@ Puppeteer API是分层次的，反映了浏览器结构。在下面的图表中�
 
 ### Environment Variables
 
-Puppeteer looks for certain [environment variables](https://en.wikipedia.org/wiki/Environment_variable) to aid its operations.
-If puppeteer doesn't find them in environment, lowercased variant of these variables will be used from the [npm config](https://docs.npmjs.com/cli/config).
+Puppeteer寻找某些[环境变量](https://en.wikipedia.org/wiki/Environment_variable)来帮助其操作.
+如果puppeteer在环境中找不到它们，那么这些变量的小写变体将会在[npm config](https://docs.npmjs.com/cli/config)中使用.
 
-- `HTTP_PROXY`, `HTTPS_PROXY`, `NO_PROXY` - defines HTTP proxy settings that are used to download and run Chromium.
-- `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD` - do not download bundled Chromium during installation step.
-- `PUPPETEER_DOWNLOAD_HOST` - overwrite host part of URL that is used to download Chromium
-- `PUPPETEER_CHROMIUM_REVISION` - specify a certain version of chrome you'd like puppeteer to use during the installation step.
+- `HTTP_PROXY`, `HTTPS_PROXY`, `NO_PROXY` - 定义了用于下载和运行的Chromium HTTP代理服务器设置。.
+- `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD` - 在安装步骤中不要下载捆绑的Chromium.
+- `PUPPETEER_DOWNLOAD_HOST` - 覆盖用于下载Chromium的URL的主机部分
+- `PUPPETEER_CHROMIUM_REVISION` - 指定一个你想在安装过程中使用puppeteer的Chromium版本.
 
 ### class: Puppeteer
 
-Puppeteer module provides a method to launch a Chromium instance.
-The following is a typical example of using Puppeteer to drive automation:
+Puppeteer模块提供了一种启动Chromium实例的方法。以下是使用Puppeteer驱动自动化的典型示例：
 ```js
 const puppeteer = require('puppeteer');
 
@@ -294,63 +293,62 @@ puppeteer.launch().then(async browser => {
 
 #### puppeteer.connect(options)
 - `options` <[Object]>
-  - `browserWSEndpoint` <[string]> a [browser websocket endpoint](#browserwsendpoint) to connect to.
-  - `ignoreHTTPSErrors` <[boolean]> Whether to ignore HTTPS errors during navigation. Defaults to `false`.
-  - `slowMo` <[number]> Slows down Puppeteer operations by the specified amount of milliseconds. Useful so that you can see what is going on.
+  - `browserWSEndpoint` <[string]> 连接到的 [浏览器websocket端点](#browserwsendpoint).
+  - `ignoreHTTPSErrors` <[boolean]> 是否在链接过程中忽略HTTPS错误。默认为 `false`.
+  - `slowMo` <[number]> 使Puppeteer操作减速指定的毫秒数。这样你就可以看到发生了什么.
 - returns: <[Promise]<[Browser]>>
 
-This methods attaches Puppeteer to an existing Chromium instance.
+此方法将Puppeteer添加到现有的Chromium实例.
 
 #### puppeteer.createBrowserFetcher([options])
 - `options` <[Object]>
-  - `host` <[string]> A download host to be used. Defaults to `https://storage.googleapis.com`.
-  - `path` <[string]> A path for the downloads folder. Defaults to `<root>/.local-chromium`, where `<root>` is puppeteer's package root.
-  - `platform` <[string]> Possible values are: `mac`, `win32`, `win64`, `linux`. Defaults to the current platform.
+  - `host` <[string]> 要使用的下载主机。默认为 `https://storage.googleapis.com`.
+  - `path` <[string]> 下载文件夹的路径。默认为`<root>/.local-chromium`,  `<root>` puppeteer的包根目录.
+  - `platform` <[string]> 可能的值包括： `mac`, `win32`, `win64`, `linux`. 默认为当前平台.
 - returns: <[BrowserFetcher]>
 
 #### puppeteer.defaultArgs()
-- returns: <[Array]<[string]>> The default flags that Chromium will be launched with.
+- returns: <[Array]<[string]>> Chromium将与之一起启动的默认标志.
 
 #### puppeteer.executablePath()
-- returns: <[string]> A path where Puppeteer expects to find bundled Chromium. Chromium might not exist there if the download was skipped with [`PUPPETEER_SKIP_CHROMIUM_DOWNLOAD`](#environment-variables).
+- returns: <[string]> Puppeteer希望找到捆绑的Chromium的路径。如果下载被跳过，Chromium可能不存在 [`PUPPETEER_SKIP_CHROMIUM_DOWNLOAD`](#environment-variables).
 
 #### puppeteer.launch([options])
-- `options` <[Object]>  Set of configurable options to set on the browser. Can have the following fields:
-  - `ignoreHTTPSErrors` <[boolean]> Whether to ignore HTTPS errors during navigation. Defaults to `false`.
-  - `headless` <[boolean]> Whether to run browser in [headless mode](https://developers.google.com/web/updates/2017/04/headless-chrome). Defaults to `true` unless the `devtools` option is `true`.
-  - `executablePath` <[string]> Path to a Chromium or Chrome executable to run instead of the bundled Chromium. If `executablePath` is a relative path, then it is resolved relative to [current working directory](https://nodejs.org/api/process.html#process_process_cwd).
-  - `slowMo` <[number]> Slows down Puppeteer operations by the specified amount of milliseconds. Useful so that you can see what is going on.
-  - `args` <[Array]<[string]>> Additional arguments to pass to the browser instance. The list of Chromium flags can be found [here](http://peter.sh/experiments/chromium-command-line-switches/).
-  - `ignoreDefaultArgs` <[boolean]> Do not use [`puppeteer.defaultArgs()`](#puppeteerdefaultargs). Dangerous option; use with care. Defaults to `false`.
-  - `handleSIGINT` <[boolean]> Close the browser process on Ctrl-C. Defaults to `true`.
-  - `handleSIGTERM` <[boolean]> Close the browser process on SIGTERM. Defaults to `true`.
-  - `handleSIGHUP` <[boolean]> Close the browser process on SIGHUP. Defaults to `true`.
-  - `timeout` <[number]> Maximum time in milliseconds to wait for the browser instance to start. Defaults to `30000` (30 seconds). Pass `0` to disable timeout.
-  - `dumpio` <[boolean]> Whether to pipe the browser process stdout and stderr into `process.stdout` and `process.stderr`. Defaults to `false`.
-  - `userDataDir` <[string]> Path to a [User Data Directory](https://chromium.googlesource.com/chromium/src/+/master/docs/user_data_dir.md).
-  - `env` <[Object]> Specify environment variables that will be visible to the browser. Defaults to `process.env`.
-  - `devtools` <[boolean]> Whether to auto-open a DevTools panel for each tab. If this option is `true`, the `headless` option will be set `false`.
-  - `pipe` <[boolean]> Connects to the browser over a pipe instead of a WebSocket. Defaults to `false`.
-- returns: <[Promise]<[Browser]>> Promise which resolves to browser instance.
+- `options` <[Object]>  在浏览器上设置的一组可配置选项。可以有以下字段:
+  - `ignoreHTTPSErrors` <[boolean]> 是否在链接过程中忽略HTTPS错误。默认为 `false`.
+  - `headless` <[boolean]> 是否以[无头模式](https://developers.google.com/web/updates/2017/04/headless-chrome)运行浏览器. 默认为`true` 除非`devtools` 选项是`true`.
+  - `executablePath` <[string]> 行Chromium或Chrome可执行文件的路径，而不是捆绑的Chromium。如果 `executablePath` 是相对路径，则相对于[当前工作目录进行](https://nodejs.org/api/process.html#process_process_cwd)解析.
+  - `slowMo` <[number]> 使Puppeteer操作减速指定的毫秒数。这样你就可以看到发生了什么.
+  - `args` <[Array]<[string]>> 传递给浏览器实例的其他参数。Chromium标志的列表可以在 [这里](http://peter.sh/experiments/chromium-command-line-switches/)找到.
+  - `ignoreDefaultArgs` <[boolean]> 不要使用 [`puppeteer.defaultArgs()`](#puppeteerdefaultargs). 危险选择; 小心使用。默认为 `false`.
+  - `handleSIGINT` <[boolean]> 在Ctrl-C上关闭浏览器进程。默认为`true`.
+  - `handleSIGTERM` <[boolean]> 在SIGTERM上关闭浏览器进程。默认为`true`.
+  - `handleSIGHUP` <[boolean]> 在SIGHUP上关闭浏览器进程。默认为`true`.
+  - `timeout` <[number]> 等待浏览器实例启动的最长时间（以毫秒为单位）。默认为`30000` (30秒). 通过 `0`禁用超时.
+  - `dumpio` <[boolean]> 是否将浏览器进程标准输出和标准错误输入 `process.stdout` 和 `process.stderr`. 默认为 `false`.
+  - `userDataDir` <[string]>  [用户数据目录的](https://chromium.googlesource.com/chromium/src/+/master/docs/user_data_dir.md)路径.
+  - `env` <[Object]> 指定浏览器可见的环境变量。默认为 `process.env`.
+  - `devtools` <[boolean]> 是否为每个选项卡自动打开DevTools面板。如果这个选项是 `true`, 该 `headless` 选项将被设置 `false`.
+  - `pipe` <[boolean]> 通过pipe而不是WebSocket连接到浏览器。默认为 `false`.
+- returns: <[Promise]<[Browser]>> 解析为浏览器实例.
 
-The method launches a browser instance with given arguments. The browser will be closed when the parent node.js process is closed.
+该方法启动具有给定参数的浏览器实例。当父节点node.js进程关闭时，浏览器将被关闭.
 
-> **NOTE** Puppeteer can also be used to control the Chrome browser, but it works best with the version of Chromium it is bundled with. There is no guarantee it will work with any other version. Use `executablePath` option with extreme caution.
+> **注意** Puppeteer也可以用来控制Chrome浏览器，但它与捆绑在一起的Chromium版本效果最好。不能保证它可以与任何其他版本一起使用.  `executablePath` 谨慎使用选项.
 >
-> If Google Chrome (rather than Chromium) is preferred, a [Chrome Canary](https://www.google.com/chrome/browser/canary.html) or [Dev Channel](https://www.chromium.org/getting-involved/dev-channel) build is suggested.
+> 如果首选Google Chrome（而不是Chromium），则建议使用[Chrome Canary](https://www.google.com/chrome/browser/canary.html) 或 [Dev Channel](https://www.chromium.org/getting-involved/dev-channel) 版本.
 >
-> In [puppeteer.launch([options])](#puppeteerlaunchoptions) above, any mention of Chromium also applies to Chrome.
+> 在上面的[puppeteer.launch([options])](#puppeteerlaunchoptions) 中，任何提及的Chromium也适用于Chrome.
 >
-> See [`this article`](https://www.howtogeek.com/202825/what%E2%80%99s-the-difference-between-chromium-and-chrome/) for a description of the differences between Chromium and Chrome. [`This article`](https://chromium.googlesource.com/chromium/src/+/lkcr/docs/chromium_browser_vs_google_chrome.md) describes some differences for Linux users.
+> 请参阅 [`this article`](https://www.howtogeek.com/202825/what%E2%80%99s-the-difference-between-chromium-and-chrome/) Chromium和Chrome之间的区别说明. [`This article`](https://chromium.googlesource.com/chromium/src/+/lkcr/docs/chromium_browser_vs_google_chrome.md) 描述了Linux用户的一些差异.
 
 ### class: BrowserFetcher
 
-BrowserFetcher can download and manage different versions of Chromium.
+BrowserFetcher 可以下载和管理不同版本的Chromium.
 
-BrowserFetcher operates on revision strings that specify a precise version of Chromium, e.g. `"533271"`. Revision strings can be obtained from [omahaproxy.appspot.com](http://omahaproxy.appspot.com/).
+BrowserFetcher 在指定精确版本的Chromium的修订字符串上运行，例如 `"533271"`. 修订字符串可以从[omahaproxy.appspot.com](http://omahaproxy.appspot.com/)获取.
 
-Example on how to use BrowserFetcher to download a specific version of Chromium and run
-Puppeteer against it:
+关于如何使用BrowserFetcher下载特定版本的Chromium并运行Puppeteer的例子：
 
 ```js
 const browserFetcher = puppeteer.createBrowserFetcher();
@@ -358,55 +356,54 @@ const revisionInfo = await browserFetcher.download('533271');
 const browser = await puppeteer.launch({executablePath: revisionInfo.executablePath})
 ```
 
-> **NOTE** BrowserFetcher is not designed to work concurrently with other
-> instances of BrowserFetcher that share the same downloads directory.
+> **注意** BrowserFetcher不能与共享相同下载目录的其他BrowserFetcher实例并行工作。
 
 #### browserFetcher.canDownload(revision)
-- `revision` <[string]> a revision to check availability.
-- returns: <[Promise]<[boolean]>>  returns `true` if the revision could be downloaded from the host.
+- `revision` <[string]> 检查可用性的修订.
+- returns: <[Promise]<[boolean]>>  返回 `true` 是否可以从主机下载修订版本.
 
-The method initiates a HEAD request to check if the revision is available.
+该方法通过一个 HEAD 请求来检查修订版是否可用.
 
 #### browserFetcher.download(revision[, progressCallback])
-- `revision` <[string]> a revision to download.
-- `progressCallback` <[function]([number], [number])> A function that will be called with two arguments:
-  - `downloadedBytes` <[number]> how many bytes have been downloaded
-  - `totalBytes` <[number]> how large is the total download.
-- returns: <[Promise]<[Object]>> Resolves with revision information when the revision is downloaded and extracted
-  - `revision` <[string]> the revision the info was created from
-  - `folderPath` <[string]> path to the extracted revision folder
-  - `executablePath` <[string]> path to the revision executable
-  - `url` <[string]> URL this revision can be downloaded from
-  - `local` <[boolean]> whether the revision is locally available on disk
+- `revision` <[string]> 下载的修订.
+- `progressCallback` <[function]([number], [number])> 一个将被两个参数调用的函数:
+  - `downloadedBytes` <[number]> 已经下载了多少个字节
+  - `totalBytes` <[number]> 总下载量有多大.
+- returns: <[Promise]<[Object]>> 下载并提取修订版时解决修订信息
+  - `revision` <[string]> 信息的创建版本
+  - `folderPath` <[string]> 提取的修订文件夹的路径
+  - `executablePath` <[string]> 修订版可执行文件的路径
+  - `url` <[string]> 该版本的URL可以从中下载
+  - `local` <[boolean]> 版本是否在本地可用磁盘上
 
-The method initiates a GET request to download the revision from the host.
+该方法通过一个GET请求以从主机下载修订版本.
 
 #### browserFetcher.localRevisions()
-- returns: <[Promise]<[Array]<[string]>>> A list of all revisions available locally on disk.
+- returns: <[Promise]<[Array]<[string]>>> 磁盘上本地可用的所有修订的列表.
 
 #### browserFetcher.platform()
-- returns: <[string]> Returns one of `mac`, `linux`, `win32` or `win64`.
+- returns: <[string]> 返回 `mac`, `linux`, `win32` or `win64`其中之一.
 
 #### browserFetcher.remove(revision)
-- `revision` <[string]> a revision to remove. The method will throw if the revision has not been downloaded.
-- returns: <[Promise]> Resolves when the revision has been removed.
+- `revision` <[string]> 要删除的修订。如果尚未下载修订版，该方法将抛出.
+- returns: <[Promise]> 修订版本被删除时解析.
 
 #### browserFetcher.revisionInfo(revision)
-- `revision` <[string]> a revision to get info for.
+- `revision` <[string]> 获取信息的修订版本.
 - returns: <[Object]>
-  - `revision` <[string]> the revision the info was created from
-  - `folderPath` <[string]> path to the extracted revision folder
-  - `executablePath` <[string]> path to the revision executable
-  - `url` <[string]> URL this revision can be downloaded from
-  - `local` <[boolean]> whether the revision is locally available on disk
+  - `revision` <[string]> 信息的创建版本
+  - `folderPath` <[string]> 提取的修订文件夹的路径
+  - `executablePath` <[string]> 修订版可执行文件的路径
+  - `url` <[string]> 该版本的可以从中下载
+  - `local` <[boolean]> 版本是否在本地可用磁盘上
 
 ### class: Browser
 
 * extends: [`EventEmitter`](https://nodejs.org/api/events.html#events_class_eventemitter)
 
-A Browser is created when Puppeteer connects to a Chromium instance, either through [`puppeteer.launch`](#puppeteerlaunchoptions) or [`puppeteer.connect`](#puppeteerconnectoptions).
+当Puppeteer通过 [`puppeteer.launch`](#puppeteerlaunchoptions) 或连接到Chromium实例时创建浏览器 [`puppeteer.connect`](#puppeteerconnectoptions).
 
-An example of using a [Browser] to create a [Page]:
+使用 [Browser] 创建[Page]的示例:
 ```js
 const puppeteer = require('puppeteer');
 
@@ -417,7 +414,7 @@ puppeteer.launch().then(async browser => {
 });
 ```
 
-An example of disconnecting from and reconnecting to a [Browser]:
+断开连接并重新连接到 [Browser]的示例:
 ```js
 const puppeteer = require('puppeteer');
 
@@ -434,55 +431,55 @@ puppeteer.launch().then(async browser => {
 });
 ```
 #### event: 'disconnected'
-Emitted when Puppeteer gets disconnected from the Chromium instance. This might happen because of one of the following:
-- Chromium is closed or crashed
-- The [`browser.disconnect`](#browserdisconnect) method was called
+当Puppeteer与Chromium实例断开连接时发出。这可能由于以下原因而发生：
+- Chromium 被关闭或销毁
+- 该[`browser.disconnect`](#browserdisconnect) 方法被调用
 
 #### event: 'targetchanged'
 - <[Target]>
 
-Emitted when the url of a target changes.
+当目标的网址更改时触发.
 
 #### event: 'targetcreated'
 - <[Target]>
 
-Emitted when a target is created, for example when a new page is opened by [`window.open`](https://developer.mozilla.org/en-US/docs/Web/API/Window/open) or [`browser.newPage`](#browsernewpage).
+在创建目标时触发，例如，当通过 [`window.open`](https://developer.mozilla.org/en-US/docs/Web/API/Window/open) 或 [`browser.newPage`](#browsernewpage)打开新页面时.
 
 #### event: 'targetdestroyed'
 - <[Target]>
 
-Emitted when a target is destroyed, for example when a page is closed.
+当一个目标被销毁时，例如当一个页面被关闭时被触发.
 
 #### browser.close()
 - returns: <[Promise]>
 
-Closes Chromium and all of its pages (if any were opened). The [Browser] object itself is considered to be disposed and cannot be used anymore.
+关闭Chromium及其所有页面（如果有的话）。 该 [Browser] 对象本身被认为是销毁了，不能再使用.
 
 #### browser.disconnect()
 
-Disconnects Puppeteer from the browser, but leaves the Chromium process running. After calling `disconnect`, the [Browser] object is considered disposed and cannot be used anymore.
+将浏览器中的Puppeteer断开连接，但Chromium进程仍在运行。在调用 `disconnect`之后, 该 [Browser] 对象本身被认为是销毁了，不能再使用.
 
 #### browser.newPage()
-- returns: <[Promise]<[Page]>> Promise which resolves to a new [Page] object.
+- returns: <[Promise]<[Page]>> Promise 它解析为一个新的 [Page] 对象.
 
 #### browser.pages()
-- returns: <[Promise]<[Array]<[Page]>>> Promise which resolves to an array of all open pages.
+- returns: <[Promise]<[Array]<[Page]>>> Promise 解析为所有打开页面的数组.
 
 #### browser.process()
-- returns: <?[ChildProcess]> Spawned browser process. Returns `null` if the browser instance was created with [`puppeteer.connect`](#puppeteerconnectoptions) method.
+- returns: <?[ChildProcess]> 产生的浏览器进程. 如果浏览器实例是使用 [`puppeteer.connect`](#puppeteerconnectoptions) 方法创建的，则返回`null`.
 
 #### browser.targets()
-- returns: <[Array]<[Target]>> An array of all active targets.
+- returns: <[Array]<[Target]>> 所有活动目标的数组.
 
 #### browser.userAgent()
-- returns: <[Promise]<[string]>> Promise which resolves to the browser's original user agent.
+- returns: <[Promise]<[string]>> 它解析为浏览器的 user agent.
 
-> **NOTE** Pages can override browser user agent with [page.setUserAgent](#pagesetuseragentuseragent)
+> **注意** 页面可以使用[page.setUserAgent](#pagesetuseragentuseragent)覆盖浏览器的 user agent
 
 #### browser.version()
-- returns: <[Promise]<[string]>> For headless Chromium, this is similar to `HeadlessChrome/61.0.3153.0`. For non-headless, this is similar to `Chrome/61.0.3153.0`.
+- returns: <[Promise]<[string]>> 对于无头Chromium，这与之类似 `HeadlessChrome/61.0.3153.0`. 对于非无头，这与之类似 `Chrome/61.0.3153.0`.
 
-> **NOTE** the format of browser.version() might change with future releases of Chromium.
+> **注意** browser.version() 的格式可能随着未来版本的Chromium而改变.
 
 #### browser.wsEndpoint()
 - returns: <[string]> Browser websocket url.
@@ -562,7 +559,7 @@ Emitted when the JavaScript [`DOMContentLoaded`](https://developer.mozilla.org/e
 
 Emitted when the page crashes.
 
-> **NOTE** `error` event has a special meaning in Node, see [error events](https://nodejs.org/api/events.html#events_error_events) for details.
+> **注意** `error` event has a special meaning in Node, see [error events](https://nodejs.org/api/events.html#events_error_events) for details.
 
 #### event: 'frameattached'
 - <[Frame]>
@@ -913,7 +910,7 @@ When called, the function executes `puppeteerFunction` in node.js and returns a 
 
 If the `puppeteerFunction` returns a [Promise], it will be awaited.
 
-> **NOTE** Functions installed via `page.exposeFunction` survive navigations.
+> **注意** Functions installed via `page.exposeFunction` survive navigations.
 
 An example of adding an `md5` function into the page:
 ```js
@@ -1020,9 +1017,9 @@ The `page.goto` will throw an error if:
 - the `timeout` is exceeded during navigation.
 - the main resource failed to load.
 
-> **NOTE** `page.goto` either throw or return a main resource response. The only exception is navigation to `about:blank`, which would succeed and return `null`.
+> **注意** `page.goto` either throw or return a main resource response. The only exception is navigation to `about:blank`, which would succeed and return `null`.
 
-> **NOTE** Headless mode doesn't support navigating to a PDF document. See the [upstream issue](https://bugs.chromium.org/p/chromium/issues/detail?id=761295).
+> **注意** Headless mode doesn't support navigating to a PDF document. See the [upstream issue](https://bugs.chromium.org/p/chromium/issues/detail?id=761295).
 
 #### page.hover(selector)
 - `selector` <[string]> A [selector] to search for element to hover. If there are multiple elements satisfying the selector, the first will be hovered.
@@ -1058,7 +1055,7 @@ Page is guaranteed to have a main frame which persists during navigations.
   - `JSHeapUsedSize` <[number]> Used JavaScript heap size.
   - `JSHeapTotalSize` <[number]> Total JavaScript heap size.
 
-> **NOTE** All timestamps are in monotonic time: monotonically increasing time in seconds since an arbitrary point in the past.
+> **注意** All timestamps are in monotonic time: monotonically increasing time in seconds since an arbitrary point in the past.
 
 #### page.mouse
 
@@ -1089,7 +1086,7 @@ Page is guaranteed to have a main frame which persists during navigations.
     - `left` <[string]> Left margin, accepts values labeled with units.
 - returns: <[Promise]<[Buffer]>> Promise which resolves with PDF buffer.
 
-> **NOTE** Generating a pdf is currently only supported in Chrome headless.
+> **注意** Generating a pdf is currently only supported in Chrome headless.
 
 `page.pdf()` generates a pdf of the page with `print` css media. To generate a pdf with `screen` media, call [page.emulateMedia('screen')](#pageemulatemediamediatype) before calling `page.pdf()`:
 
@@ -1125,7 +1122,7 @@ The `format` options are:
 - `A5`: 5.83in x 8.27in
 - `A6`: 4.13in x 5.83in
 
-> **NOTE** `headerTemplate` and `footerTemplate` markup have the following limitations:
+> **注意** `headerTemplate` and `footerTemplate` markup have the following limitations:
 > 1. Script tags inside templates are not evaluated.
 > 2. Page styles are not visible inside templates.
 
@@ -1174,7 +1171,7 @@ Shortcut for [page.mainFrame().executionContext().queryObjects(prototypeHandle)]
   - `omitBackground` <[boolean]> Hides default white background and allows capturing screenshots with transparency. Defaults to `false`.
 - returns: <[Promise]<[Buffer]>> Promise which resolves to buffer with captured screenshot
 
-> **NOTE** Screenshots take at least 1/6 second on OS X. See https://crbug.com/741689 for discussion.
+> **注意** Screenshots take at least 1/6 second on OS X. See https://crbug.com/741689 for discussion.
 
 #### page.select(selector, ...values)
 - `selector` <[string]> A [selector] to query page for
@@ -1197,7 +1194,7 @@ Shortcut for [page.mainFrame().select()](#frameselectselector-values)
 
 Toggles bypassing page's Content-Security-Policy.
 
-> **NOTE** CSP bypassing happens at the moment of CSP initialization rather then evaluation. Usually this means
+> **注意** CSP bypassing happens at the moment of CSP initialization rather then evaluation. Usually this means
 that `page.setBypassCSP` should be called before navigating to the domain.
 
 #### page.setCacheEnabled(enabled)
@@ -1239,13 +1236,13 @@ This setting will change the default maximum navigation time of 30 seconds for t
 
 The extra HTTP headers will be sent with every request the page initiates.
 
-> **NOTE** page.setExtraHTTPHeaders does not guarantee the order of headers in the outgoing requests.
+> **注意** page.setExtraHTTPHeaders does not guarantee the order of headers in the outgoing requests.
 
 #### page.setJavaScriptEnabled(enabled)
 - `enabled` <[boolean]> Whether or not to enable JavaScript on the page.
 - returns: <[Promise]>
 
-> **NOTE** changing this value won't affect scripts that have already been run. It will take full effect on the next [navigation](#pagegotourl-options).
+> **注意** changing this value won't affect scripts that have already been run. It will take full effect on the next [navigation](#pagegotourl-options).
 
 #### page.setOfflineMode(enabled)
 - `enabled` <[boolean]> When `true`, enables offline mode for the page.
@@ -1276,7 +1273,7 @@ puppeteer.launch().then(async browser => {
 });
 ```
 
-> **NOTE** Enabling request interception disables page caching.
+> **注意** Enabling request interception disables page caching.
 
 #### page.setUserAgent(userAgent)
 - `userAgent` <[string]> Specific user agent to use in this page
@@ -1292,7 +1289,7 @@ puppeteer.launch().then(async browser => {
   - `isLandscape` <[boolean]> Specifies if viewport is in landscape mode. Defaults to `false`.
 - returns: <[Promise]>
 
-> **NOTE** in certain cases, setting viewport will reload the page in order to set the `isMobile` or `hasTouch` properties.
+> **注意** in certain cases, setting viewport will reload the page in order to set the `isMobile` or `hasTouch` properties.
 
 In the case of multiple pages in a single browser, each page can have its own viewport size.
 
@@ -1485,7 +1482,7 @@ await page.keyboard.press('KeyA');
 await page.keyboard.up('Shift');
 ```
 
-> **NOTE** On MacOS, keyboard shortcuts like `⌘ A` -> Select All do not work. See [#1313](https://github.com/GoogleChrome/puppeteer/issues/1313)
+> **注意** On MacOS, keyboard shortcuts like `⌘ A` -> Select All do not work. See [#1313](https://github.com/GoogleChrome/puppeteer/issues/1313)
 
 #### keyboard.down(key[, options])
 - `key` <[string]> Name of key to press, such as `ArrowLeft`. See [USKeyboardLayout] for a list of all key names.
@@ -1501,7 +1498,7 @@ If `key` is a modifier key, `Shift`, `Meta`, `Control`, or `Alt`, subsequent key
 
 After the key is pressed once, subsequent calls to [`keyboard.down`](#keyboarddownkey-options) will have [repeat](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/repeat) set to true. To release the key, use [`keyboard.up`](#keyboardupkey).
 
-> **NOTE** Modifier keys DO influence `keyboard.down`. Holding down `Shift` will type the text in upper case.
+> **注意** Modifier keys DO influence `keyboard.down`. Holding down `Shift` will type the text in upper case.
 
 #### keyboard.press(key[, options])
 - `key` <[string]> Name of key to press, such as `ArrowLeft`. See [USKeyboardLayout] for a list of all key names.
@@ -1512,7 +1509,7 @@ After the key is pressed once, subsequent calls to [`keyboard.down`](#keyboarddo
 
 If `key` is a single character and no modifier keys besides `Shift` are being held down, a `keypress`/`input` event will also generated. The `text` option can be specified to force an input event to be generated.
 
-> **NOTE** Modifier keys DO effect `elementHandle.press`. Holding down `Shift` will type the text in upper case.
+> **注意** Modifier keys DO effect `elementHandle.press`. Holding down `Shift` will type the text in upper case.
 
 Shortcut for [`keyboard.down`](#keyboarddownkey-options) and [`keyboard.up`](#keyboardupkey).
 
@@ -1526,7 +1523,7 @@ Dispatches a `keypress` and `input` event. This does not send a `keydown` or `ke
 page.keyboard.sendCharacter('嗨');
 ```
 
-> **NOTE** Modifier keys DO NOT effect `keyboard.sendCharacter`. Holding down `Shift` will not type the text in upper case.
+> **注意** Modifier keys DO NOT effect `keyboard.sendCharacter`. Holding down `Shift` will not type the text in upper case.
 
 #### keyboard.type(text, options)
 - `text` <[string]> A text to type into a focused element.
@@ -1543,7 +1540,7 @@ page.keyboard.type('Hello'); // Types instantly
 page.keyboard.type('World', {delay: 100}); // Types slower, like a user
 ```
 
-> **NOTE** Modifier keys DO NOT effect `keyboard.type`. Holding down `Shift` will not type the text in upper case.
+> **注意** Modifier keys DO NOT effect `keyboard.type`. Holding down `Shift` will not type the text in upper case.
 
 #### keyboard.up(key)
 - `key` <[string]> Name of key to release, such as `ArrowLeft`. See [USKeyboardLayout] for a list of all key names.
@@ -1882,7 +1879,7 @@ Returns frame's name attribute as specified in the tag.
 
 If the name is empty, returns the id attribute instead.
 
-> **NOTE** This value is calculated once when the frame is created, and will not update if the attribute is changed later.
+> **注意** This value is calculated once when the frame is created, and will not update if the attribute is changed later.
 
 #### frame.parentFrame()
 - returns: <?[Frame]> Returns parent frame, if any. Detached frames and main frames return `null`.
@@ -2095,7 +2092,7 @@ await resultHandle.dispose();
 #### executionContext.frame()
 - returns: <?[Frame]> Frame associated with this execution context.
 
-> **NOTE** Not every execution context is associated with a frame. For example, workers and extensions have execution contexts that are not associated with frames.
+> **注意** Not every execution context is associated with a frame. For example, workers and extensions have execution contexts that are not associated with frames.
 
 #### executionContext.queryObjects(prototypeHandle)
 - `prototypeHandle` <[JSHandle]> A handle to the object prototype.
@@ -2170,11 +2167,11 @@ Returns a JSON representation of the object. If the object has a
 [`toJSON`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#toJSON()_behavior)
 function, it **will not be called**.
 
-> **NOTE** The method will return an empty JSON object if the referenced object is not stringifiable. It will throw an error if the object has circular references.
+> **注意** The method will return an empty JSON object if the referenced object is not stringifiable. It will throw an error if the object has circular references.
 
 ### class: ElementHandle
 
-> **NOTE** Class [ElementHandle] extends [JSHandle].
+> **注意** Class [ElementHandle] extends [JSHandle].
 
 ElementHandle represents an in-page DOM element. ElementHandles can be created with the [page.$](#pageselector) method.
 
@@ -2295,7 +2292,7 @@ If the element is detached from DOM, the method throws an error.
 
 Returns a JSON representation of the object. The JSON is generated by running [`JSON.stringify`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) on the object in page and consequent [`JSON.parse`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse) in puppeteer.
 
-> **NOTE** The method will throw if the referenced object is not stringifiable.
+> **注意** The method will throw if the referenced object is not stringifiable.
 
 #### elementHandle.press(key[, options])
 - `key` <[string]> Name of key to press, such as `ArrowLeft`. See [USKeyboardLayout] for a list of all key names.
@@ -2308,7 +2305,7 @@ Focuses the element, and then uses [`keyboard.down`](#keyboarddownkey-options) a
 
 If `key` is a single character and no modifier keys besides `Shift` are being held down, a `keypress`/`input` event will also be generated. The `text` option can be specified to force an input event to be generated.
 
-> **NOTE** Modifier keys DO effect `elementHandle.press`. Holding down `Shift` will type the text in upper case.
+> **注意** Modifier keys DO effect `elementHandle.press`. Holding down `Shift` will type the text in upper case.
 
 #### elementHandle.screenshot([options])
 - `options` <[Object]> Same options as in [page.screenshot](#pagescreenshotoptions).
@@ -2482,7 +2479,7 @@ page.on('request', request => {
 });
 ```
 
-> **NOTE** Mocking responses for dataURL requests is not supported.
+> **注意** Mocking responses for dataURL requests is not supported.
 > Calling `request.respond` for a dataURL request is a noop.
 
 #### request.response()
@@ -2669,7 +2666,7 @@ _To output coverage in a form consumable by [Istanbul](https://github.com/istanb
     - `start` <[number]> A start offset in text, inclusive
     - `end` <[number]> An end offset in text, exclusive
 
-> **NOTE** CSS Coverage doesn't include dynamically injected style tags without sourceURLs.
+> **注意** CSS Coverage doesn't include dynamically injected style tags without sourceURLs.
 
 #### coverage.stopJSCoverage()
 - returns: <[Promise]<[Array]<[Object]>>> Promise that resolves to the array of coverage reports for all non-anonymous scripts
@@ -2679,7 +2676,7 @@ _To output coverage in a form consumable by [Istanbul](https://github.com/istanb
     - `start` <[number]> A start offset in text, inclusive
     - `end` <[number]> An end offset in text, exclusive
 
-> **NOTE** JavaScript Coverage doesn't include anonymous scripts. However, scripts with sourceURLs are
+> **注意** JavaScript Coverage doesn't include anonymous scripts. However, scripts with sourceURLs are
 reported.
 
 [Array]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array "Array"

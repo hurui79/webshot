@@ -15,7 +15,15 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 // 使用 morgan 将请求日志打印到控制台
-app.use(morgan('dev'));
+morgan.token('date_now', function getDateToken(req, res) {
+    var date = new Date();
+    return "" + date.getFullYear() +"-"+ (date.getMonth()+1) +"-"+date.getDate() + " " +
+        date.getHours() + ':' +
+        date.getMinutes() + ':' +
+        date.getSeconds();
+});
+morgan.format('log','[log] :method :url :response-time ms :status [:date_now]')
+app.use(morgan('log'));
 
 // =======================
 // 路由 ================
