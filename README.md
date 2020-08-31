@@ -2,6 +2,8 @@
 使用nodejs  和 puppeteer搭建的网页截图 api服务应用
 # 运行 
 ```
+npm i puppeteer
+npm install -g forever
 npm install
 ```
 ```
